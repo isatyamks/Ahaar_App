@@ -55,7 +55,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/upload', methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
