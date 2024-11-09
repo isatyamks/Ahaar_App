@@ -53,7 +53,10 @@ submit = st.button("Analyze the Picture")
 
 # Input prompt for the generative AI model
 input_prompt = """
-You are an expert in nutrition. Your task is to analyze the food items in the image, calculate the total calories, and provide detailed nutritional information for each food item. Each nutritional value should be on a new line and if there are same items just dont repeat it and show the quatity in the following format:
+You are a nutrition expert. Your task is to analyze the food items in the uploaded image, 
+calculate the total calorie content, and provide detailed nutritional information for each unique food item. 
+For each food item, present the nutritional values on separate lines. If the same food item appears more than once, 
+do not repeat the information, but instead indicate the quantity in the following format:
 
 Detected Food Items:
 - name: "Item 1"
