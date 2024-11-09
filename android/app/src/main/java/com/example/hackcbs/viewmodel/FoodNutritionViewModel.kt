@@ -23,7 +23,7 @@ class FoodNutritionViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             try {
                 // Try to open the asset file and read it
-                val inputStream = getApplication<Application>().assets.open("onion.json")
+                val inputStream = getApplication<Application>().assets.open("response.json")
                 val jsonString = inputStream.bufferedReader().use { it.readText() }
 
                 Log.d("FoodNutritionViewModel", "JSON String: $jsonString")  // Log the raw JSON data
