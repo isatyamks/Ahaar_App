@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Ahaar - AI-Powered Nutrition and Diet Tracking App
 
 **Hackathon Project**
