@@ -1,0 +1,30 @@
+{
+  "name": "Sandwich",
+  "quantity": "1 sandwich",
+  "calories": "250 kcal",
+  "protein": "10 g",
+  "carbs": "30 g",
+  "fiber": "3 g",
+  "fats": "10 g",
+  "water_content": "120 ml",
+  "sugar": "3 g",
+  "sodium": "500 mg",
+  "cholesterol": "20 mg",
+  "potassium": "300 mg",
+  "vitamin_c": "5 mg",
+  "vitamin_a": "150 IU",
+  "calcium": "100 mg",
+  "iron": "2 mg",
+
+  "weekly_protein": "70 g",
+  "weekly_carbs": "210 g",
+  "weekly_fiber": "21 g",
+  "weekly_fats": "70 g",
+  "weekly_waterContent": "28000 ml",
+
+  "monthly_protein": "100 g",
+  "monthly_carbs": "376 g",
+  "monthly_fiber": "9 g",
+  "monthly_fats": "27 g",
+  "monthly_waterContent": "2000 ml"
+}
