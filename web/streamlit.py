@@ -19,12 +19,12 @@ def get_gemini_response(input_prompt, image):
 
 def input_image_setup(uploaded_file):
     if uploaded_file is not None:
-        # Read the file into bytes
+       
         bytes_data = uploaded_file.getvalue()
 
         image_parts = [
             {
-                "mime_type": uploaded_file.type,  # Get the mime type of the uploaded file
+                "mime_type": uploaded_file.type,  
                 "data": bytes_data
             }
         ]
@@ -35,9 +35,9 @@ def input_image_setup(uploaded_file):
 
 
 
-st.set_page_config(page_title="Nutrify")
+st.set_page_config(page_title="Ahaar")
 
-st.header("Nutrify")
+st.header("Ahaar")
 st.write("Upload your food picture and get detailed nutritional information.")
 
 # File uploader widget
@@ -122,7 +122,6 @@ Detected Food Items:
 
 
 
-# If submit button is clicked and file is uploaded
 if submit and uploaded_file is not None:
     image_data = input_image_setup(uploaded_file)
     response = get_gemini_response(input_prompt, image_data)
@@ -131,5 +130,4 @@ if submit and uploaded_file is not None:
 else:
     st.warning("Please upload an image and click Analyze to proceed.")
 
-# Disclaimer warning
-st.warning("Nutrify can make mistakes.")
+st.warning("Ahaar can make mistakes.")
