@@ -31,13 +31,13 @@ st.set_page_config(page_title="Ahaar", page_icon="🍲", layout="centered")
 
 st.markdown("""
     <style>
-        /* Set main background and text colors */
+     
         body {
             background-color: #f3f4f6;
             color: #333;
         }
 
-        /* Header styling */
+       
         .header h1 {
             color: #2E86C1;
             font-size: 3em;
@@ -46,14 +46,13 @@ st.markdown("""
             font-family: 'Roboto', sans-serif;
         }
 
-        /* Text and button styling */
         .stTextInput, .stFileUploader, .stButton, .stWarning {
             font-family: 'Roboto', sans-serif;
             color: #333;
             border-radius: 8px;
         }
 
-        /* Button styling */
+       
         .stButton button {
             background-color: #2E86C1;
             color: white;
@@ -62,13 +61,13 @@ st.markdown("""
             border-radius: 8px;
         }
 
-        /* Warning box */
+       
         .stWarning {
             color: #FF5733;
             font-size: 0.9em;
         }
 
-        /* Response styling */
+        
         .response {
             font-family: 'Roboto', sans-serif;
             color: #2E4053;
@@ -82,7 +81,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="header"><h1>Ahaar</h1></div>', unsafe_allow_html=True)
-st.write("Upload a picture of your food to get detailed nutritional information, powered by AI.")
+st.write("Upload a picture of your food")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
