@@ -40,7 +40,7 @@ st.set_page_config(page_title="Ahaar")
 st.header("Ahaar")
 st.write("Upload your food picture and get detailed nutritional information.")
 
-# File uploader widget
+
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 image = ""
@@ -48,10 +48,10 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image.", use_column_width=True)
 
-# Button to trigger image analysis
+
 submit = st.button("Analyze the Picture")
 
-# Input prompt for the generative AI model
+
 input_prompt = """
 You are a nutrition expert. Your task is to analyze the food items in the uploaded image, 
 calculate the total calorie content, and provide detailed nutritional information for each unique food item. 
