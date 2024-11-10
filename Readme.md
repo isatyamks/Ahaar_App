@@ -1,6 +1,13 @@
 # Ahaar - AI-Powered Nutrition and Diet Tracking App
 
-**Hackathon Project**
+**Hackathon - HackCBS 7.0**
+
+## 👥 Team Sapiens
+- **Satyam Kumar** - ML Developer
+- **Avinash Sharma** - App Developer
+- **Aryan Jaiswal** - App Developer
+- **Prince Yadav** - UI & UX  Designer
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -185,4 +192,4 @@ Ahaar aims to make nutrition tracking simpler, more accurate, and goal-oriented 
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/your-username/ahaar.git
->>>>>>> 409920455e7ea601e32eb4b1ec7671f20b1d30e6
+
