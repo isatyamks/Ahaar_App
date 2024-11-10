@@ -57,7 +57,7 @@ Ahaar aims to make nutrition tracking simpler, more accurate, and goal-oriented 
 
 ---
 
-## 🚀 Tech Stack
+
 
 ## 🚀 Tech Stack
 
@@ -92,7 +92,7 @@ Ahaar aims to make nutrition tracking simpler, more accurate, and goal-oriented 
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/your-username/ahaar.git
-=======
+
 # Ahaar - AI-Powered Nutrition and Diet Tracking App
 
 **HackCBS 7.0 Hackathon Project**
