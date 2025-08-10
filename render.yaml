@@ -9,6 +9,8 @@ services:
     autoDeploy: true
     healthCheckPath: /api/health
   envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
       # Set these in Render dashboard or sync from YAML if desired (values here are placeholders)
       # - key: GEMINI_API_KEY
       #   sync: false
