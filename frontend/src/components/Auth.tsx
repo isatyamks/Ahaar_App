@@ -3,10 +3,11 @@ import { apiService } from '../services/api';
 
 interface Props {
   onAuth: () => void;
+  initialMode?: 'login' | 'signup';
 }
 
-export const Auth: React.FC<Props> = ({ onAuth }) => {
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+export const Auth: React.FC<Props> = ({ onAuth, initialMode = 'login' }) => {
+  const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -32,7 +33,7 @@ export const Auth: React.FC<Props> = ({ onAuth }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="p-2">
       <div className="bg-white rounded-lg shadow p-6 w-full max-w-sm">
         <h1 className="text-xl font-semibold mb-4 text-center">{mode === 'login' ? 'Login' : 'Sign Up'}</h1>
         <form onSubmit={handleSubmit} className="space-y-3">

@@ -3,25 +3,49 @@
 **Hackathon - HackCBS 7.0**
 
 ## 👥 Team Sapiens
-- **Satyam Kumar** - ML Developer
-- **Avinash Sharma** - App Developer
-- **Aryan Jaiswal** - App Developer
-- **Prince Yadav** - UI & UX  Designer
-
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Ahaar is an intelligent Android application designed to enhance nutrition tracking by detecting foods in real-time, analyzing nutritional values, and helping users maintain a balanced diet. Powered by machine learning, Ahaar identifies food items on a plate, tracks nutritional intake (calories, fats, proteins, etc.) daily, weekly, and monthly, and provides personalized diet recommendations to meet individual health goals.
+Ahaar is an intelligent Android + Web application designed to enhance nutrition tracking by detecting foods in real-time, analyzing nutritional values, and helping users maintain a balanced diet. Powered by machine learning, Ahaar identifies food items on a plate, tracks nutritional intake (calories, fats, proteins, etc.) daily, weekly, and monthly, and provides personalized diet recommendations to meet individual health goals.
 
 ---
 
-## 📱 Features
+## 📹 Demo Video
 
-- **Food Detection**: Utilizes a machine learning model to accurately detect food items on a plate and analyze their nutritional values.
-- **Nutritional Analysis**: Calculates detailed nutritional information (calories, fats, proteins, carbohydrates, vitamins, etc.) for each meal.
-- **Progress Tracking**: Provides daily, weekly, and monthly summaries of nutritional intake.
-- **Personalized Diet Suggestions**: Suggests food items to help users achieve their diet goals, whether for weight loss, muscle gain, or balanced nutrition.
-- **User-Friendly Dashboard**: Clear and intuitive interface displaying real-time insights and recommendations.
+- YouTube: https://youtu.be/VIDEO_ID_HERE
+- Google Drive (fallback): https://drive.google.com/file/d/DRIVE_FILE_ID/view
+- GitHub Release (MP4): https://github.com/OWNER/REPO/releases/latest/download/ahaar-demo.mp4
+
+Preview thumbnail (YouTube):
+
+[![Watch the demo](https://img.youtube.com/vi/VIDEO_ID_HERE/hqdefault.jpg)](https://youtu.be/VIDEO_ID_HERE)
+
+Tip: Replace the placeholders above with your actual video links. GitHub also renders direct .mp4 links inline if you prefer hosting the file in Releases or GitHub Assets.
+
+---
+
+## 🚧 Mobile App (Coming Soon)
+
+We’re polishing the full mobile experience. Until then, here’s a working preview of the app:
+
+- YouTube (preview): https://youtu.be/MOBILE_VIDEO_ID
+- Google Drive (preview): https://drive.google.com/file/d/MOBILE_DRIVE_FILE_ID/view
+- GitHub Release (MP4 preview): https://github.com/OWNER/REPO/releases/latest/download/ahaar-mobile-preview.mp4
+
+You can embed a thumbnail too:
+
+[![Mobile app preview](https://img.youtube.com/vi/MOBILE_VIDEO_ID/hqdefault.jpg)](https://youtu.be/MOBILE_VIDEO_ID)
+
+---
+
+##  Features
+
+- Food Detection and Image Upload (Android + Web)
+- Nutritional Analysis (calories, macro/micro nutrients)
+- Progress Tracking (daily, weekly, monthly)
+- Personalized Diet Suggestions
+- Advanced Insights (GI/GL, ORAC, fats breakdown, allergens, activity match, footprint)
+- User Auth (JWT), meals history, and charts
 
 ---
 
@@ -35,25 +59,22 @@ We created **Ahaar** to empower individuals to take control of their nutrition a
 
 ### Why Ahaar is Important for India
 
-- **Addressing Health Issues**: The increase in diabetes, heart disease, and obesity in India highlights the need for proactive nutrition management. Ahaar helps users understand what’s on their plates and make choices that reduce health risks.
-  
-- **Cultural Relevance**: Indian diets include unique foods like roti, dal, and samosas, which often lack clear nutritional data. Ahaar brings this information to users, making it easier to appreciate the health impact of traditional Indian meals.
+- Addresses rising lifestyle diseases with practical nutrition guidance
+- Culturally relevant for Indian diets (roti, dal, samosa, etc.)
+- Bridges the nutrition knowledge gap with instant, clear info
+- Saves time with simple logging and automated analysis
 
-- **Filling the Knowledge Gap**: Detailed nutritional knowledge is limited in many regions. Ahaar provides users with instant access to accurate nutritional values, empowering them to make well-informed dietary decisions.
 
-- **Time-Saving Convenience**: Ahaar streamlines the process of tracking meals and analyzing nutrition, offering quick, reliable insights that help users focus on their health without extra effort.
 
 ### The Vision
 
 With **Ahaar**, we aim to reduce lifestyle diseases by promoting awareness and supporting healthier eating choices for millions of Indians. Whether in urban centers or rural areas, Ahaar makes nutrition tracking easy, accessible, and impactful, enabling everyone to build healthier habits for a better future.
 
----
 
 ## 🎯 Purpose
 
 Ahaar aims to make nutrition tracking simpler, more accurate, and goal-oriented by leveraging artificial intelligence. It empowers users to make informed dietary decisions, ultimately supporting a healthier lifestyle.
 
----
 
 ## 💡 How It Works
 
@@ -64,39 +85,99 @@ Ahaar aims to make nutrition tracking simpler, more accurate, and goal-oriented 
 
 ---
 
-
-
 ## 🚀 Tech Stack
 
-- **Android**: Core application framework.
-- **Kotlin**: Primary programming language for Android development.
-- **Machine Learning**: Custom-trained model for food detection and nutritional estimation.
-- **TensorFlow Lite**: Efficient inference on mobile devices.
-- **Python**: Used for data preprocessing and training machine learning models.
-- **Pandas**: Data manipulation and analysis.
-- **NumPy**: Numerical operations and data handling.
-- **TensorFlow** and **Keras**: Deep learning frameworks for building and training models.
-- **Gemini 1.5 Model**: Advanced model used for precise food recognition.
-- **Streamlit**: Interface for testing and visualizing model outputs.
-- **Firebase**: Backend for data storage, user authentication, and analytics.
-- **Retrofit**: Library for managing network requests in Android.
-- **Seaborn** and **Matplotlib**: Visualization libraries for data exploration and analysis.
-
+- Android (Kotlin)
+- Web: React + Vite + TypeScript + Tailwind CSS
+- Backend: Flask (ASGI via Uvicorn), CORS, JWT
+- DB: MongoDB Atlas + GridFS
+- AI: Gemini 1.5 (google-generativeai)
+- Deployment: Render (backend), Vercel/static (frontend)
 
 ---
 
 ## 📈 Key Metrics
 
-- **Caloric Intake**: Tracks daily, weekly, and monthly calories consumed.
-- **Macronutrient Breakdown**: Logs proteins, fats, and carbohydrates.
-- **Micronutrients**: Tracks essential vitamins and minerals.
-- **Diet Progress**: Visualizes trends to help users stay on track with their goals.
+- Caloric Intake (per period)
+- Macronutrient Breakdown (protein/carbs/fat)
+- Micronutrients (vitamins, minerals)
+- Trends (sparklines for recent meals)
 
 ---
 
 ## 🛠️ Installation and Setup
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-username/ahaar.git
+1. Clone the Repository
+    ```bash
+    git clone https://github.com/your-username/ahaar.git
+    ```
+2. Backend (Flask + ASGI)
+    - Path: `backend/`
+    - Create `.env` with:
+       - `GEMINI_API_KEY=...`
+       - `JWT_SECRET=...`
+       - `MONGO_URI=...`
+    - Run (Windows cmd):
+       ```bat
+       cd backend
+       python -m venv .venv
+       .venv\Scripts\activate
+       pip install -r requirements.txt
+       uvicorn app:asgi_app --host 0.0.0.0 --port 8000
+       ```
+    - Health: http://127.0.0.1:8000/api/health
+3. Frontend (Vite + React)
+    - Path: `frontend/`
+    - Create `.env` with:
+       - `VITE_API_BASE_URL=https://ahaar-app.onrender.com/api`
+    - Run:
+       ```bat
+       cd frontend
+       npm install
+       npm run dev
+       ```
+4. Android App
+    - Open `Android/` in Android Studio and run on a device/emulator.
+
+---
+
+## 🌐 Deployment
+
+### Backend (Render)
+- Uses `backend/render.yaml`, `backend/Procfile`, `backend/runtime.txt` (Python 3.11.9)
+- Start: `uvicorn app:asgi_app`
+- Health: `/api/health`
+- Env vars: `GEMINI_API_KEY`, `MONGO_URI`, `JWT_SECRET`, `PYTHON_VERSION=3.11.9`
+
+### Frontend (Vercel or static hosting)
+- Set env `VITE_API_BASE_URL`
+- Build: `npm run build` → deploy `dist/`
+
+---
+
+## 🔐 Authentication
+- Email/password signup and login (JWT)
+- JWT stored in localStorage; sent via `Authorization: Bearer <token>`
+- Legacy upload password retained for non-auth dev flows
+
+---
+
+## 🧠 Advanced Insights (AI)
+- GI/GL, amino acids, fatty acids (Ω3/Ω6, sat/mono/poly)
+- Antioxidants (ORAC), diet compat, allergens, deficiency/excess alerts
+- Workout equivalence + burn-time; environmental footprint (CO₂, water, sourcing)
+- Historical AI suggestions
+- UI: health gauge, ORAC bar, fat bars, and trends (calories/protein)
+
+---
+
+## 🧪 Quick API Test
+```bash
+curl -s https://ahaar-app.onrender.com/api/health
+```
+
+---
+
+## 📄 License
+MIT © Team Sapiens
 
