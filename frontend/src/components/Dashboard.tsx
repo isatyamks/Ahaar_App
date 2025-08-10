@@ -10,6 +10,7 @@ import MealUpload from './MealUpload';
 import { useNutritionData } from '../hooks/useNutritionData';
 import { apiService } from '../services/api';
 import AdvancedInsights from './AdvancedInsights';
+import TrendSparklines from './TrendSparklines';
 
 const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -241,6 +242,18 @@ const Dashboard = () => {
                 />
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Trends Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Calories (last 7 meals)</h3>
+            <TrendSparklines values={currentData.meals.slice(-7).map(m => m.calories)} color="#f97316" />
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Protein (last 7 meals)</h3>
+            <TrendSparklines values={currentData.meals.slice(-7).map(m => (m as any).nutrition?.macronutrients?.protein || 0)} color="#16a34a" />
           </div>
         </div>
 
