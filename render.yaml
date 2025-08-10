@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ahaar-backend
+    env: python
+    rootDir: backend
+    plan: free
+  buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+    startCommand: uvicorn app:asgi_app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    healthCheckPath: /api/health
+  envVars:
+      # Set these in Render dashboard or sync from YAML if desired (values here are placeholders)
+      # - key: GEMINI_API_KEY
+      #   sync: false
+      # - key: MONGO_URI
+      #   sync: false
+      # - key: MONGO_DB_NAME
+      #   value: ahaar
+      # - key: JWT_SECRET
+      #   sync: false
+      # - key: UPLOAD_PASSWORD
+      #   sync: false
