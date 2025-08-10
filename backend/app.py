@@ -11,11 +11,13 @@ import uuid
 import csv
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import logging
 from dotenv import load_dotenv
 
+# Load environment variables from .env file FIRST
+load_dotenv()
+
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173"], supports_credentials=True)
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
@@ -26,18 +28,11 @@ nutrition_data = {}
 user_meals = {}
 
 MEALS_CSV = os.path.join(os.path.dirname(__file__), 'meals.csv')
-# Load environment variables from .env file
-load_dotenv()
 
-UPLOAD_PASSWORD = os.getenv('UPLOAD_PASSWORD', 'default_password')
+UPLOAD_PASSWORD = os.getenv('UPLOAD_PASSWORD', 'idk991')
 
 # Setup rate limiter
 limiter = Limiter(get_remote_address, app=app)
-
-# Setup logging for failed attempts
-logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), 'security.log'),
-                    level=logging.WARNING,
-                    format='%(asctime)s %(levelname)s: %(message)s')
 
 def analyze_food_image(image):
     """Analyze food image using Gemini and extract nutrition information"""
@@ -188,9 +183,13 @@ def append_meal_to_csv(meal):
 def upload_meal():
     """Upload and analyze a meal image (password required)"""
     try:
+        print("Upload meal endpoint called")
         password = request.form.get('password')
+        print(f"Received password: {password}")
+        print(f"Expected password: {UPLOAD_PASSWORD}")
+        
         if password != UPLOAD_PASSWORD:
-            logging.warning(f"Failed password attempt from IP {request.remote_addr}")
+            print("Password mismatch!")
             return jsonify({'error': 'Unauthorized'}), 401
         if 'image' not in request.files:
             return jsonify({'error': 'No image file provided'}), 400
@@ -363,5 +362,19 @@ def health_check():
         'gemini_configured': bool(os.getenv('GEMINI_API_KEY'))
     })
 
+@app.route('/api/test', methods=['POST'])
+def test_endpoint():
+    """Test endpoint for CORS"""
+    return jsonify({'message': 'CORS is working', 'method': 'POST'})
+
+# ASGI adapter for uvicorn
+try:
+    from asgiref.wsgi import WsgiToAsgi
+    # Create ASGI app for uvicorn
+    asgi_app = WsgiToAsgi(app)
+except ImportError:
+    # Fallback if asgiref is not installed
+    asgi_app = None
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)
