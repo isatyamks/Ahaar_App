@@ -107,48 +107,70 @@ def analyze_food_image(image):
     """Analyze food image using Gemini and extract nutrition information"""
     
     prompt = """
-    Analyze this food image and provide detailed nutritional information in JSON format.
-    
-    Please return the data in this exact structure:
-    {
-        "food_name": "Name of the food/dish",
-        "serving_size": "Estimated serving size",
-        "calories": number,
-        "macronutrients": {
-            "protein": number (in grams),
-            "carbs": number (in grams),
-            "fat": number (in grams),
-            "fiber": number (in grams),
-            "sugar": number (in grams)
-        },
-        "micronutrients": {
-            "vitamins": [
-                {"name": "Vitamin A", "amount": number, "unit": "μg"},
-                {"name": "Vitamin C", "amount": number, "unit": "mg"},
-                {"name": "Vitamin D", "amount": number, "unit": "μg"},
-                {"name": "Vitamin E", "amount": number, "unit": "mg"},
-                {"name": "Vitamin K", "amount": number, "unit": "μg"},
-                {"name": "Folate", "amount": number, "unit": "μg"},
-                {"name": "B12", "amount": number, "unit": "μg"}
-            ],
-            "minerals": [
-                {"name": "Calcium", "amount": number, "unit": "mg"},
-                {"name": "Iron", "amount": number, "unit": "mg"},
-                {"name": "Magnesium", "amount": number, "unit": "mg"},
-                {"name": "Phosphorus", "amount": number, "unit": "mg"},
-                {"name": "Potassium", "amount": number, "unit": "mg"},
-                {"name": "Zinc", "amount": number, "unit": "mg"}
-            ]
-        },
-        "other_nutrients": {
-            "sodium": number (in mg),
-            "cholesterol": number (in mg)
-        },
-        "confidence": number (0-100, how confident you are in the analysis)
-    }
-    
-    Be as accurate as possible with the nutritional values based on typical serving sizes.
-    """
+        Analyze this food image and provide detailed nutritional information in JSON format.
+
+        Return EXACTLY one JSON object (no markdown), following this structure and units:
+        {
+            "food_name": string,
+            "serving_size": string,
+            "calories": number,
+            "macronutrients": {
+                "protein": number,    // grams
+                "carbs": number,      // grams
+                "fat": number,        // grams
+                "fiber": number,      // grams
+                "sugar": number       // grams
+            },
+            "micronutrients": {
+                "vitamins": [ {"name": string, "amount": number, "unit": "μg"|"mg"} ],
+                "minerals": [ {"name": string, "amount": number, "unit": "mg"} ]
+            },
+            "other_nutrients": {
+                "sodium": number,       // mg
+                "cholesterol": number   // mg
+            },
+            "advanced": {
+                "glycemic_index": number,
+                "glycemic_load": number,
+                "amino_acid_profile": {
+                    "leucine": number, "valine": number, "lysine": number // mg per serving (estimate)
+                },
+                "fatty_acids": {
+                    "omega_3": number,      // grams
+                    "omega_6": number,      // grams
+                    "omega_3_to_6_ratio": number,
+                    "saturated_fat": number,        // grams
+                    "monounsaturated_fat": number,  // grams
+                    "polyunsaturated_fat": number   // grams
+                },
+                "antioxidant_orac": number,
+                "meal_health_score": number, // 0-10
+                "diet_compatibility": [string], // e.g., ["keto", "vegan", "low_carb"]
+                "potential_allergens": [string],
+                "deficiency_alerts": [string],
+                "excessive_intake_alerts": [string],
+                "workout_energy_match": string,
+                "burn_time_equivalents": {
+                    "walking_minutes": number,
+                    "jogging_minutes": number,
+                    "cycling_minutes": number
+                },
+                "environmental": {
+                    "carbon_footprint_g_co2": number,
+                    "water_usage_liters": number,
+                    "sourcing": { "local": boolean, "organic": boolean }
+                },
+                "historical": {
+                    "meal_history_impact": string,
+                    "trend_suggestions": [string],
+                    "ai_suggestions": [string]
+                }
+            },
+            "confidence": number // 0-100
+        }
+
+        Be concise and use numeric values where specified. If uncertain, provide reasonable estimates.
+        """
     
     try:
         response = model.generate_content([prompt, image])
@@ -203,6 +225,29 @@ def analyze_food_image(image):
             "other_nutrients": {
                 "sodium": 200,
                 "cholesterol": 20
+            },
+            "advanced": {
+                "glycemic_index": 55,
+                "glycemic_load": 12,
+                "amino_acid_profile": {"leucine": 1200, "valine": 900, "lysine": 800},
+                "fatty_acids": {
+                    "omega_3": 0.2,
+                    "omega_6": 1.1,
+                    "omega_3_to_6_ratio": 0.18,
+                    "saturated_fat": 3,
+                    "monounsaturated_fat": 4,
+                    "polyunsaturated_fat": 2
+                },
+                "antioxidant_orac": 1500,
+                "meal_health_score": 6.5,
+                "diet_compatibility": ["balanced"],
+                "potential_allergens": [],
+                "deficiency_alerts": ["Low Vitamin D"],
+                "excessive_intake_alerts": [],
+                "workout_energy_match": "Suitable for a light 30-minute jog",
+                "burn_time_equivalents": {"walking_minutes": 60, "jogging_minutes": 30, "cycling_minutes": 25},
+                "environmental": {"carbon_footprint_g_co2": 800, "water_usage_liters": 200, "sourcing": {"local": False, "organic": False}},
+                "historical": {"meal_history_impact": "Occasional", "trend_suggestions": ["Increase greens"], "ai_suggestions": ["Add spinach for iron"]}
             },
             "confidence": 50
         }

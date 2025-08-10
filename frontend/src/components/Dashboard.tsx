@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TrendingUp, Apple, Droplets, Heart, Shield, Eye, Bone, Plus, Wifi, WifiOff } from 'lucide-react';
 import NutritionCard from './NutritionCard';
 import TimePeriodSelector from './TimePeriodSelector';
@@ -8,6 +8,7 @@ import MealsList from './MealsList';
 import NutritionChart from './NutritionChart';
 import MealUpload from './MealUpload';
 import { useNutritionData } from '../hooks/useNutritionData';
+import { apiService } from '../services/api';
 
 const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -17,6 +18,7 @@ const Dashboard = () => {
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
 
   const PASSWORD = 'isatyamks810';
   const PASSWORD_KEY = 'meal_upload_authenticated';
@@ -26,6 +28,13 @@ const Dashboard = () => {
     selectedDate,
     dateRange
   );
+
+  useEffect(() => {
+    try {
+      const u = localStorage.getItem('user');
+      if (u) setUser(JSON.parse(u));
+    } catch {}
+  }, []);
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
@@ -72,10 +81,11 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(PASSWORD_KEY);
-    setShowMealUpload(false);
-    setShowPasswordPrompt(false);
+  // legacy password modal cleanup happens on close
+
+  const handleTopLogout = () => {
+    apiService.logout();
+    window.location.reload();
   };
   return (
     <div className="min-h-screen bg-gray-50">
@@ -85,7 +95,7 @@ const Dashboard = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <Apple className="h-8 w-8 text-green-600" />
-              <h1 className="text-xl font-medium text-gray-900">NutriTrack</h1>
+              <h1 className="text-xl font-medium text-gray-900">Ahaar</h1>
               <div className="flex items-center space-x-1">
                 {isOnline ? (
                   <Wifi className="h-4 w-4 text-green-500" aria-label="Connected to backend" />
@@ -113,6 +123,28 @@ const Dashboard = () => {
                 dateRange={dateRange}
                 onDateRangeSelect={handleDateRangeSelect}
               />
+              <div className="hidden md:block h-6 w-px bg-gray-200" />
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
+                  <div className="h-8 w-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-semibold">
+                    {(user?.name || user?.email || 'G').charAt(0).toUpperCase()}
+                  </div>
+                  <div className="hidden sm:flex flex-col leading-tight">
+                    <span className="text-sm font-medium text-gray-900 truncate max-w-[140px]">
+                      {user?.name || user?.email || 'Guest'}
+                    </span>
+                    {user?.email && user?.name && (
+                      <span className="text-xs text-gray-500 truncate max-w-[140px]">{user.email}</span>
+                    )}
+                  </div>
+                </div>
+                <button
+                  onClick={handleTopLogout}
+                  className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -283,12 +315,6 @@ const Dashboard = () => {
             onUploadSuccess={handleMealUploadSuccess}
             onClose={() => setShowMealUpload(false)}
           />
-          <button
-            onClick={handleLogout}
-            className="absolute top-4 right-4 px-3 py-1 bg-red-500 text-white rounded-md text-xs"
-          >
-            Logout
-          </button>
         </div>
       )}
   {/* Password Prompt Modal (legacy fallback) */}

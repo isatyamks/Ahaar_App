@@ -1,6 +1,42 @@
 const ENV_URL = (import.meta as any).env?.VITE_API_BASE_URL as string | undefined;
 const API_BASE_URL = ENV_URL || 'https://ahaar-app.onrender.com/api';
 
+export interface NutritionAdvanced {
+  glycemic_index?: number;
+  glycemic_load?: number;
+  amino_acid_profile?: { leucine?: number; valine?: number; lysine?: number };
+  fatty_acids?: {
+    omega_3?: number;
+    omega_6?: number;
+    omega_3_to_6_ratio?: number;
+    saturated_fat?: number;
+    monounsaturated_fat?: number;
+    polyunsaturated_fat?: number;
+  };
+  antioxidant_orac?: number;
+  meal_health_score?: number;
+  diet_compatibility?: string[];
+  potential_allergens?: string[];
+  deficiency_alerts?: string[];
+  excessive_intake_alerts?: string[];
+  workout_energy_match?: string;
+  burn_time_equivalents?: {
+    walking_minutes?: number;
+    jogging_minutes?: number;
+    cycling_minutes?: number;
+  };
+  environmental?: {
+    carbon_footprint_g_co2?: number;
+    water_usage_liters?: number;
+    sourcing?: { local?: boolean; organic?: boolean };
+  };
+  historical?: {
+    meal_history_impact?: string;
+    trend_suggestions?: string[];
+    ai_suggestions?: string[];
+  };
+}
+
 export interface NutritionData {
   calories: number;
   protein: number;
@@ -18,6 +54,17 @@ export interface NutritionData {
     time: string;
     calories: number;
     imageUrl: string;
+    nutrition?: {
+      macronutrients?: {
+        protein?: number;
+        carbs?: number;
+        fat?: number;
+        fiber?: number;
+        sugar?: number;
+      };
+      advanced?: NutritionAdvanced;
+      [key: string]: any;
+    };
   }>;
 }
 
