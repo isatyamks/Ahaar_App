@@ -12,6 +12,9 @@ Ahaar is an intelligent Android + Web application designed to enhance nutrition 
 
 ## 📹 Demo Video
 
+- Local (in this repo): video/data.mp4
+    - Raw link (GitHub web): https://raw.githubusercontent.com/isatyamks/Ahaar_App/main/video/data.mp4
+    - Tip: On GitHub, click the file and use "Download" to play locally, or open the raw URL.
 - YouTube: https://youtu.be/VIDEO_ID_HERE
 - Google Drive (fallback): https://drive.google.com/file/d/DRIVE_FILE_ID/view
 - GitHub Release (MP4): https://github.com/OWNER/REPO/releases/latest/download/ahaar-demo.mp4
@@ -21,6 +24,10 @@ Preview thumbnail (YouTube):
 [![Watch the demo](https://img.youtube.com/vi/VIDEO_ID_HERE/hqdefault.jpg)](https://youtu.be/VIDEO_ID_HERE)
 
 Tip: Replace the placeholders above with your actual video links. GitHub also renders direct .mp4 links inline if you prefer hosting the file in Releases or GitHub Assets.
+
+Quick HTML5 embed (works on many Markdown renderers but not all):
+
+<video src="video/data.mp4" controls width="640" />
 
 ---
 

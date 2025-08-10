@@ -12,6 +12,7 @@ const LandingPage: React.FC<Props> = ({ onAuth }) => {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
   const ENV_URL = (import.meta as any).env?.VITE_API_BASE_URL as string | undefined;
   const API_BASE = useMemo(() => ENV_URL || 'https://ahaar-app.onrender.com/api', [ENV_URL]);
+  const DEMO_VIDEO_URL = 'https://raw.githubusercontent.com/isatyamks/Ahaar_App/main/video/data.mp4';
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   // Smooth scroll & scrollspy
   const sections = ['features','use-cases','api','pricing','faq','contact','security'] as const;
@@ -101,6 +102,7 @@ const LandingPage: React.FC<Props> = ({ onAuth }) => {
             <div className="mt-6 flex flex-wrap gap-3">
               <button onClick={() => { setAuthMode('signup'); setShowAuth(true); }} className="btn btn-primary">Get Started</button>
               <a href="#api" className="btn btn-outline" style={{ color: 'var(--ah-secondary)', borderColor: '#e5e7eb' }}>For Developers</a>
+              <a href="#demo" className="btn btn-outline" style={{ color: 'var(--ah-secondary)', borderColor: '#e5e7eb' }}>Watch Demo</a>
             </div>
             <div className="mt-6 flex items-center gap-6 text-sm" style={{ color: 'var(--ah-text-muted)' }}>
               <div className="flex items-center gap-2"><Shield className="h-4 w-4" style={{ color: 'var(--ah-primary)' }} /> JWT Auth</div>
@@ -204,11 +206,18 @@ const LandingPage: React.FC<Props> = ({ onAuth }) => {
           <p className="text-gray-600 mb-6">See how scanning a meal instantly reveals its nutrition breakdown.</p>
           <div className="card p-0 overflow-hidden">
             <div className="w-full" style={{ aspectRatio: '16 / 9', background: 'var(--ah-bg-soft)' }}>
-              {/* Replace with <video> or <img loading="lazy"> when asset is ready */}
-              <div className="h-full w-full flex items-center justify-center gap-3 text-sm text-gray-600">
-                <Camera className="h-10 w-10" style={{ color: 'var(--ah-primary)' }} />
-                <span>Demo video/GIF coming soon</span>
-              </div>
+              <video
+                src={DEMO_VIDEO_URL}
+                controls
+                className="w-full h-full object-cover"
+              >
+                Sorry, your browser doesn’t support embedded videos. You can
+                <a href={DEMO_VIDEO_URL} target="_blank" rel="noreferrer">download it here</a>.
+              </video>
+            </div>
+            <div className="p-3 text-xs text-gray-600 flex items-center justify-between">
+              <span>If playback is slow, open in a new tab.</span>
+              <a className="underline" href={DEMO_VIDEO_URL} target="_blank" rel="noreferrer">Open video</a>
             </div>
           </div>
         </div>
@@ -467,9 +476,9 @@ const data = await res.json();`}</CodeBlock>
               <ul className="mt-3 space-y-2">
                 <li><a href="#features" className="hover:underline" style={{ color: 'inherit' }}>Overview</a></li>
                 <li><a href="#pricing" className="hover:underline" style={{ color: 'inherit' }}>Pricing</a></li>
-                <li><a href="/roadmap" className="hover:underline" style={{ color: 'inherit' }}>Roadmap</a></li>
-                <li><a href="/changelog" className="hover:underline" style={{ color: 'inherit' }}>Changelog</a></li>
-                <li><a href="/status" className="hover:underline" style={{ color: 'inherit' }}>Status</a></li>
+                <li><a href="https://github.com/isatyamks/Ahaar_App/issues?q=is%3Aissue+label%3Aroadmap" target="_blank" rel="noreferrer" className="hover:underline" style={{ color: 'inherit' }}>Roadmap</a></li>
+                <li><a href="https://github.com/isatyamks/Ahaar_App/commits/main" target="_blank" rel="noreferrer" className="hover:underline" style={{ color: 'inherit' }}>Changelog</a></li>
+                <li><a href={`${API_BASE}/health`} target="_blank" rel="noreferrer" className="hover:underline" style={{ color: 'inherit' }}>Status</a></li>
               </ul>
             </div>
 
@@ -478,10 +487,10 @@ const data = await res.json();`}</CodeBlock>
               <div className="font-medium" style={{ color: 'var(--ah-secondary)' }}>Developers</div>
               <ul className="mt-3 space-y-2">
                 <li><a href="#api" className="hover:underline" style={{ color: 'inherit' }}>API</a></li>
-                <li><a href="#api" className="hover:underline" style={{ color: 'inherit' }}>Docs</a></li>
-                <li><a href="/guides" className="hover:underline" style={{ color: 'inherit' }}>Guides</a></li>
-                <li><a href="/sdks" className="hover:underline" style={{ color: 'inherit' }}>SDKs</a></li>
-                <li><a href="/examples" className="hover:underline" style={{ color: 'inherit' }}>Examples</a></li>
+                <li><a href="https://github.com/isatyamks/Ahaar_App#readme" target="_blank" rel="noreferrer" className="hover:underline" style={{ color: 'inherit' }}>Docs (README)</a></li>
+                <li><a href="#api" className="hover:underline" style={{ color: 'inherit' }}>Guides</a></li>
+                <li><a href="https://github.com/isatyamks/Ahaar_App/tree/main/frontend" target="_blank" rel="noreferrer" className="hover:underline" style={{ color: 'inherit' }}>Frontend</a></li>
+                <li><a href="https://github.com/isatyamks/Ahaar_App/tree/main/backend" target="_blank" rel="noreferrer" className="hover:underline" style={{ color: 'inherit' }}>Backend</a></li>
               </ul>
             </div>
 
