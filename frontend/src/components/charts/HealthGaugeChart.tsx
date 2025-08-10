@@ -30,16 +30,17 @@ const HealthGaugeChart: React.FC<Props> = ({ value, max = 10 }) => {
 
   const options = useMemo(() => ({
     responsive: true,
+    maintainAspectRatio: false,
     plugins: { legend: { display: false }, tooltip: { enabled: false } },
   }), []);
 
   return (
     <div className="relative" style={{ width: 220, height: 140 }}>
       <Doughnut data={data as any} options={options as any} />
-      <div className="absolute inset-0 flex items-center justify-center" style={{ top: '10%' }}>
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
         <div className="text-center">
-          <div className="text-2xl font-bold text-gray-900">{clamped.toFixed(1)}</div>
-          <div className="text-xs text-gray-500">Health Score</div>
+          <div className="text-xl font-semibold text-gray-900 leading-none">{clamped.toFixed(1)}</div>
+          <div className="text-[10px] text-gray-500 mt-1">Health Score</div>
         </div>
       </div>
     </div>

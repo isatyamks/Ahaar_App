@@ -58,8 +58,8 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ data }) => {
     <div className="relative">
   <Doughnut data={chartData as any} options={{ ...chartOptions, maintainAspectRatio: false }} />
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <div className="text-2xl font-bold text-gray-900">{data.calories}</div>
-        <div className="text-sm text-gray-500">calories</div>
+        <div className="text-xl font-semibold text-gray-900 leading-none">{data.calories}</div>
+        <div className="text-xs text-gray-500 mt-1">calories</div>
       </div>
     </div>
   );
