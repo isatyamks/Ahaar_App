@@ -5,12 +5,22 @@ import TimePeriodSelector from './TimePeriodSelector';
 import DateSelector from './DateSelector';
 import DateRangeDisplay from './DateRangeDisplay';
 import MealsList from './MealsList';
-import NutritionChart from './NutritionChart';
+// NutritionChart now used in TopSummaryPanel
 import MealUpload from './MealUpload';
 import { useNutritionData } from '../hooks/useNutritionData';
 import { apiService } from '../services/api';
 import AdvancedInsights from './AdvancedInsights';
 import TrendSparklines from './TrendSparklines';
+import TopSummaryPanel from './dashboard/TopSummaryPanel';
+import MacronutrientAnalysis from './dashboard/MacronutrientAnalysis';
+import MicronutrientAnalysis from './dashboard/MicronutrientAnalysis';
+import GlycemicImpact from './dashboard/GlycemicImpact';
+import CardiovascularHealth from './dashboard/CardiovascularHealth';
+import AthleticPerformance from './dashboard/AthleticPerformance';
+import DigestiveGutHealth from './dashboard/DigestiveGutHealth';
+import AllergyIntolerance from './dashboard/AllergyIntolerance';
+import EnvironmentalImpact from './dashboard/EnvironmentalImpact';
+import AIRecommendations from './dashboard/AIRecommendations';
 
 const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -96,7 +106,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <Apple className="h-8 w-8 text-green-600" />
+              <Apple className="h-8 w-8" style={{ color: 'var(--ah-primary)' }} />
               <h1 className="text-xl font-medium text-gray-900">Ahaar</h1>
               <div className="flex items-center space-x-1">
                 {isOnline ? (
@@ -109,7 +119,7 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={handleAddMealClick}
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                className="flex items-center space-x-2 btn btn-primary rounded-lg"
               >
                 <Plus className="h-4 w-4" />
                 <span>Add Meal</span>
@@ -128,7 +138,7 @@ const Dashboard = () => {
               <div className="hidden md:block h-6 w-px bg-gray-200" />
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-semibold">
+                  <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-semibold">
                     {(user?.name || user?.email || 'G').charAt(0).toUpperCase()}
                   </div>
                   <div className="hidden sm:flex flex-col leading-tight">
@@ -159,6 +169,20 @@ const Dashboard = () => {
           selectedPeriod={selectedPeriod}
           dateRange={dateRange}
         />
+
+        {/* Top Summary Panel */}
+        {(() => {
+          const latest = [...currentData.meals].reverse().find(m => (m as any).nutrition?.advanced);
+          const adv = (latest as any)?.nutrition?.advanced;
+          return (
+            <div className="mb-8">
+              <TopSummaryPanel
+                totals={{ calories: currentData.calories, protein: currentData.protein, carbs: currentData.carbs, fat: currentData.fat, fiber: currentData.fiber, sugar: currentData.sugar, sodium: currentData.sodium }}
+                latestAdvanced={adv}
+              />
+            </div>
+          );
+        })()}
 
         {/* Overview Cards */}
         {loading && (
@@ -204,45 +228,33 @@ const Dashboard = () => {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Nutrition Breakdown</h3>
-            <NutritionChart data={currentData} />
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Daily Progress</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Calories</span>
-                <span className="text-sm text-gray-600">{currentData.calories}/2000</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min((currentData.calories / 2000) * 100, 100)}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Protein</span>
-                <span className="text-sm text-gray-600">{currentData.protein}/150g</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-red-600 h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min((currentData.protein / 150) * 100, 100)}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Carbs</span>
-                <span className="text-sm text-gray-600">{currentData.carbs}/250g</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-green-600 h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min((currentData.carbs / 250) * 100, 100)}%` }}
-                />
-              </div>
-            </div>
-          </div>
+          <MacronutrientAnalysis
+            totals={{ protein: currentData.protein, carbs: currentData.carbs, fat: currentData.fat }}
+            advancedFatty={(currentData.meals[0] as any)?.nutrition?.advanced?.fatty_acids}
+            aminoProfile={(currentData.meals[0] as any)?.nutrition?.advanced?.amino_acid_profile}
+          />
+          <MicronutrientAnalysis vitamins={currentData.vitamins} minerals={currentData.minerals} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <GlycemicImpact carbs={currentData.carbs} glycemicIndex={(currentData.meals[0] as any)?.nutrition?.advanced?.glycemic_index} glycemicLoad={(currentData.meals[0] as any)?.nutrition?.advanced?.glycemic_load} />
+          <CardiovascularHealth sodiumMg={currentData.sodium} cholesterolMg={currentData.cholesterol} saturatedFatG={(currentData.meals[0] as any)?.nutrition?.advanced?.fatty_acids?.saturated_fat} potassiumMg={(currentData.minerals.find(m => m.name === 'Potassium')?.amount) || 0} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <AthleticPerformance protein={currentData.protein} carbs={currentData.carbs} fat={currentData.fat} burnEq={(currentData.meals[0] as any)?.nutrition?.advanced?.burn_time_equivalents} />
+          <DigestiveGutHealth fiberG={currentData.fiber} sugarG={currentData.sugar} glycemicIndex={(currentData.meals[0] as any)?.nutrition?.advanced?.glycemic_index} glycemicLoad={(currentData.meals[0] as any)?.nutrition?.advanced?.glycemic_load} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <AllergyIntolerance allergens={(currentData.meals[0] as any)?.nutrition?.advanced?.potential_allergens} />
+          {(() => {
+            const mealsEnv = currentData.meals.map(m => {
+              const env = (m as any).nutrition?.advanced?.environmental || {};
+              return { label: m.name, carbon: env.carbon_footprint_g_co2, water: env.water_usage_liters, calories: m.calories };
+            });
+            return <EnvironmentalImpact meals={mealsEnv} />;
+          })()}
         </div>
 
         {/* Trends Row */}
@@ -326,6 +338,22 @@ const Dashboard = () => {
           ) : null;
         })()}
 
+        {/* AI Recommendations */}
+        {(() => {
+          const latest = [...currentData.meals].reverse().find(m => (m as any).nutrition?.advanced);
+          const adv = (latest as any)?.nutrition?.advanced;
+          return (
+            <div className="mb-8">
+              <AIRecommendations
+                totals={{ protein: currentData.protein, carbs: currentData.carbs, fat: currentData.fat, fiber: currentData.fiber }}
+                vitamins={currentData.vitamins}
+                minerals={currentData.minerals}
+                suggestions={adv?.historical?.ai_suggestions}
+              />
+            </div>
+          );
+        })()}
+
         {/* Meals Section */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Meals</h3>
@@ -369,7 +397,7 @@ const Dashboard = () => {
               </button>
               <button
                 type="submit"
-                className="px-3 py-1 bg-green-600 text-white rounded-md"
+                className="px-3 py-1 btn btn-primary"
               >
                 Submit
               </button>

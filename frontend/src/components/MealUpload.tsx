@@ -108,7 +108,7 @@ const MealUpload: React.FC<MealUploadProps> = ({ onUploadSuccess, onClose }) => 
         className={`
           border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200
           ${selectedFile 
-            ? 'border-green-300 bg-green-50' 
+            ? 'border-blue-300 bg-blue-50' 
             : 'border-gray-300 hover:border-gray-400 bg-gray-50'
           }
         `}
@@ -136,7 +136,7 @@ const MealUpload: React.FC<MealUploadProps> = ({ onUploadSuccess, onClose }) => 
               <p className="text-gray-600 mb-2">Drop your meal image here or</p>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                className="inline-flex items-center space-x-2 px-4 py-2 btn btn-primary rounded-md"
               >
                 <Upload className="h-4 w-4" />
                 <span>Choose File</span>
@@ -198,7 +198,7 @@ const MealUpload: React.FC<MealUploadProps> = ({ onUploadSuccess, onClose }) => 
         className={`
           w-full mt-6 px-4 py-2 rounded-md font-medium transition-colors duration-200
           ${selectedFile && !isUploading
-            ? 'bg-green-600 text-white hover:bg-green-700'
+            ? 'btn btn-primary'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }
         `}
@@ -214,7 +214,7 @@ const MealUpload: React.FC<MealUploadProps> = ({ onUploadSuccess, onClose }) => 
       </button>
 
       <p className="text-xs text-gray-500 mt-2 text-center">
-        AI will analyze your meal and extract nutrition information
+        The server will process your image and return nutrition fields.
       </p>
     </div>
   );

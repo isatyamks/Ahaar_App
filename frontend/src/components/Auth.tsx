@@ -63,7 +63,7 @@ export const Auth: React.FC<Props> = ({ onAuth, initialMode = 'login' }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+            className="w-full btn btn-primary disabled:opacity-50"
           >
             {loading ? 'Please wait…' : mode === 'login' ? 'Login' : 'Create account'}
           </button>

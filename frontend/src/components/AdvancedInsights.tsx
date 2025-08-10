@@ -1,90 +1,159 @@
 import React from 'react';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 import type { NutritionAdvanced } from '../services/api';
-import HealthGauge from './charts/HealthGauge';
+import HealthGaugeChart from './charts/HealthGaugeChart';
+
+type BarDatum = { label: string; value: number; color?: string };
+
+const ChartBar: React.FC<{ data: BarDatum[]; unit?: string; suggestedMax?: number; height?: number }> = ({ data, unit, suggestedMax, height = 180 }) => {
+  const labels = data.map(d => d.label);
+  const values = data.map(d => d.value);
+  const colors = data.map(d => d.color || 'var(--ah-primary)');
+  const ds = {
+    labels,
+    datasets: [
+      {
+        label: unit ? `Value (${unit})` : 'Value',
+        data: values,
+        backgroundColor: colors,
+        borderWidth: 0,
+        borderRadius: 6,
+        maxBarThickness: 32,
+      },
+    ],
+  } as const;
+  const opts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx: any) => `${ctx.parsed.y}${unit ? ' ' + unit : ''}` } } },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        grid: { color: '#f3f4f6' },
+        suggestedMax: suggestedMax,
+        ticks: { callback: (v: any) => `${v}${unit ? ' ' + unit : ''}` },
+      },
+    },
+  } as const;
+  return <div style={{ height }}><Bar data={ds as any} options={opts as any} /></div>;
+};
 
 export const AdvancedInsights: React.FC<{ advanced?: NutritionAdvanced }> = ({ advanced }) => {
   if (!advanced) return null;
   const fats = advanced.fatty_acids || {};
   const burn = advanced.burn_time_equivalents || {};
   const env = advanced.environmental || {};
-  const hist = advanced.historical || {};
+  // const hist = advanced.historical || {};
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium text-gray-900">Advanced Insights</h3>
         {advanced.meal_health_score != null && (
           <div className="flex items-center">
-            <HealthGauge value={advanced.meal_health_score} />
+            <HealthGaugeChart value={advanced.meal_health_score} />
           </div>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-gray-800">Carb Insights</h4>
-          <div className="text-sm text-gray-700">GI: {advanced.glycemic_index ?? '—'} | GL: {advanced.glycemic_load ?? '—'}</div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Carb Insights */}
+        <div className="card p-6">
+          <h4 className="text-sm font-semibold text-gray-800 mb-3">Carb Insights</h4>
+          <ChartBar
+            data={[
+              { label: 'GI', value: Number(advanced.glycemic_index || 0), color: 'var(--ah-primary)' },
+              { label: 'GL', value: Number(advanced.glycemic_load || 0), color: '#60a5fa' }
+            ]}
+            suggestedMax={100}
+          />
           {advanced.antioxidant_orac != null && (
-            <div className="flex items-center space-x-3 text-sm text-gray-700">
-              <span>Antioxidants (ORAC): {advanced.antioxidant_orac}</span>
-              <div className="w-28 h-2 bg-gray-200 rounded">
-                <div className="h-2 bg-purple-500 rounded" style={{ width: `${Math.min(100, (advanced.antioxidant_orac / 2000) * 100)}%` }} />
-              </div>
+            <div className="mt-4">
+              <div className="text-xs font-medium text-gray-700 mb-1">Antioxidants (ORAC)</div>
+              <ChartBar
+                data={[{ label: 'ORAC', value: Number(advanced.antioxidant_orac || 0), color: '#8b5cf6' }]}
+                suggestedMax={2000}
+              />
             </div>
           )}
           {!!advanced.diet_compatibility?.length && (
-            <div className="text-sm text-gray-700">Diets: {advanced.diet_compatibility.join(', ')}</div>
-          )}
-          {!!advanced.potential_allergens?.length && (
-            <div className="text-sm text-red-700">Allergens: {advanced.potential_allergens.join(', ')}</div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {advanced.diet_compatibility.map((d, i) => (
+                <span key={i} className="px-2 py-1 rounded-full text-xs" style={{ background: 'var(--ah-bg-soft)', color: 'var(--ah-secondary)' }}>{d}</span>
+              ))}
+            </div>
           )}
         </div>
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-gray-800">Fatty Acids</h4>
-          <div className="text-sm text-gray-700">Omega-3: {fats.omega_3 ?? '—'} g | Omega-6: {fats.omega_6 ?? '—'} g</div>
-          <div className="text-sm text-gray-700">Ratio (Ω3:Ω6): {fats.omega_3_to_6_ratio ?? '—'}</div>
-          <div className="text-sm text-gray-700">Sat: {fats.saturated_fat ?? '—'} g, Mono: {fats.monounsaturated_fat ?? '—'} g, Poly: {fats.polyunsaturated_fat ?? '—'} g</div>
-          <div className="w-full bg-gray-200 rounded h-2">
-            <div className="h-2 bg-yellow-500 rounded" style={{ width: `${Math.min(100, (Number(fats.saturated_fat || 0) / 20) * 100)}%` }} />
-          </div>
-          <div className="w-full bg-gray-200 rounded h-2">
-            <div className="h-2 bg-amber-500 rounded" style={{ width: `${Math.min(100, (Number(fats.monounsaturated_fat || 0) / 25) * 100)}%` }} />
-          </div>
-          <div className="w-full bg-gray-200 rounded h-2">
-            <div className="h-2 bg-orange-500 rounded" style={{ width: `${Math.min(100, (Number(fats.polyunsaturated_fat || 0) / 25) * 100)}%` }} />
-          </div>
+
+        {/* Fatty Acids */}
+        <div className="card p-6">
+          <h4 className="text-sm font-semibold text-gray-800 mb-3">Fatty Acids (g)</h4>
+          <ChartBar
+            unit="g"
+            data={[
+              { label: 'Sat', value: Number(fats.saturated_fat || 0), color: '#f59e0b' },
+              { label: 'Mono', value: Number(fats.monounsaturated_fat || 0), color: '#fbbf24' },
+              { label: 'Poly', value: Number(fats.polyunsaturated_fat || 0), color: '#fb923c' }
+            ]}
+          />
+          <div className="text-xs text-gray-600 mt-2">Ω3: {fats.omega_3 ?? '—'} g | Ω6: {fats.omega_6 ?? '—'} g | Ratio Ω3:Ω6: {fats.omega_3_to_6_ratio ?? '—'}</div>
         </div>
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-gray-800">Activity</h4>
+
+        {/* Activity Equivalents */}
+        <div className="card p-6">
+          <h4 className="text-sm font-semibold text-gray-800 mb-1">Activity Equivalents (min)</h4>
           {advanced.workout_energy_match && (
-            <div className="text-sm text-gray-700">Match: {advanced.workout_energy_match}</div>
+            <div className="text-xs text-gray-600 mb-2">Match: {advanced.workout_energy_match}</div>
           )}
-          <div className="text-sm text-gray-700">Walk: {burn.walking_minutes ?? '—'}m | Jog: {burn.jogging_minutes ?? '—'}m | Cycle: {burn.cycling_minutes ?? '—'}m</div>
-          <div className="w-full bg-gray-200 rounded h-2">
-            <div className="h-2 bg-green-600 rounded" style={{ width: `${Math.min(100, (Number(burn.walking_minutes || 0) / 60) * 100)}%` }} />
-          </div>
-          <div className="w-full bg-gray-200 rounded h-2">
-            <div className="h-2 bg-green-500 rounded" style={{ width: `${Math.min(100, (Number(burn.jogging_minutes || 0) / 45) * 100)}%` }} />
-          </div>
-          <div className="w-full bg-gray-200 rounded h-2">
-            <div className="h-2 bg-green-400 rounded" style={{ width: `${Math.min(100, (Number(burn.cycling_minutes || 0) / 60) * 100)}%` }} />
-          </div>
+          <ChartBar
+            unit="min"
+            data={[
+              { label: 'Walk', value: Number(burn.walking_minutes || 0), color: 'var(--ah-primary)' },
+              { label: 'Jog', value: Number(burn.jogging_minutes || 0), color: '#3b82f6' },
+              { label: 'Cycle', value: Number(burn.cycling_minutes || 0), color: '#60a5fa' }
+            ]}
+          />
         </div>
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-gray-800">Environment & Suggestions</h4>
+
+        {/* Environment & Alerts */}
+        <div className="card p-6">
+          <h4 className="text-sm font-semibold text-gray-800 mb-3">Environment & Alerts</h4>
           {(env.carbon_footprint_g_co2 != null || env.water_usage_liters != null) && (
-            <div className="text-sm text-gray-700">CO₂: {env.carbon_footprint_g_co2 ?? '—'} g | Water: {env.water_usage_liters ?? '—'} L</div>
+            <ChartBar
+              data={[
+                { label: 'CO₂ (g)', value: Number(env.carbon_footprint_g_co2 || 0), color: '#10b981' },
+                { label: 'Water (L)', value: Number(env.water_usage_liters || 0), color: '#06b6d4' }
+              ]}
+            />
           )}
           {env.sourcing && (
-            <div className="text-sm text-gray-700">Sourcing: {env.sourcing.local ? 'Local' : 'Non-local'}{env.sourcing.organic ? ', Organic' : ''}</div>
+            <div className="text-xs text-gray-600 mt-2">Sourcing: {env.sourcing.local ? 'Local' : 'Non-local'}{env.sourcing.organic ? ', Organic' : ''}</div>
           )}
-          {!!advanced.deficiency_alerts?.length && (
-            <div className="text-sm text-amber-700">Deficiency: {advanced.deficiency_alerts.join(', ')}</div>
-          )}
-          {!!advanced.excessive_intake_alerts?.length && (
-            <div className="text-sm text-red-700">Excess: {advanced.excessive_intake_alerts.join(', ')}</div>
-          )}
-          {!!hist.ai_suggestions?.length && (
-            <div className="text-sm text-gray-700">AI: {hist.ai_suggestions.join('; ')}</div>
-          )}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {!!advanced.potential_allergens?.length && (
+              <span className="text-xs px-2 py-1 rounded-full" style={{ background: '#fee2e2', color: '#b91c1c' }}>
+                Allergens: {advanced.potential_allergens.join(', ')}
+              </span>
+            )}
+            {!!advanced.deficiency_alerts?.length && (
+              <span className="text-xs px-2 py-1 rounded-full" style={{ background: '#fffbeb', color: '#b45309' }}>
+                Deficiency: {advanced.deficiency_alerts.join(', ')}
+              </span>
+            )}
+            {!!advanced.excessive_intake_alerts?.length && (
+              <span className="text-xs px-2 py-1 rounded-full" style={{ background: '#fee2e2', color: '#b91c1c' }}>
+                Excess: {advanced.excessive_intake_alerts.join(', ')}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
