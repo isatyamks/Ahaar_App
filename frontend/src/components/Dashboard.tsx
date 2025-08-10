@@ -9,6 +9,7 @@ import NutritionChart from './NutritionChart';
 import MealUpload from './MealUpload';
 import { useNutritionData } from '../hooks/useNutritionData';
 import { apiService } from '../services/api';
+import AdvancedInsights from './AdvancedInsights';
 
 const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -300,6 +301,17 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Advanced Insights for latest meal with data */}
+        {(() => {
+          const latest = [...currentData.meals].reverse().find(m => (m as any).nutrition?.advanced);
+          const adv = (latest as any)?.nutrition?.advanced;
+          return adv ? (
+            <div className="mb-8">
+              <AdvancedInsights advanced={adv} />
+            </div>
+          ) : null;
+        })()}
 
         {/* Meals Section */}
         <div className="bg-white rounded-lg shadow-sm p-6">

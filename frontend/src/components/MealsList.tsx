@@ -1,5 +1,6 @@
 import React from 'react';
 import { Clock, Camera } from 'lucide-react';
+import type { NutritionAdvanced } from '../services/api';
 
 interface Meal {
   id: string;
@@ -8,13 +9,15 @@ interface Meal {
   calories: number;
   imageUrl: string;
   nutrition?: {
-    macronutrients: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      fiber: number;
-      sugar: number;
+    macronutrients?: {
+      protein?: number;
+      carbs?: number;
+      fat?: number;
+      fiber?: number;
+      sugar?: number;
     };
+    advanced?: NutritionAdvanced;
+    [key: string]: any;
   };
 }
 
@@ -26,11 +29,18 @@ const getMealTags = (meal: Meal): { label: string; color: string }[] => {
   if (!meal.nutrition || !meal.nutrition.macronutrients) return [];
   const { fat, fiber, sugar, protein, carbs } = meal.nutrition.macronutrients;
   const tags: { label: string; color: string }[] = [];
-  if (fat > 25) tags.push({ label: 'Too Fatty', color: 'bg-yellow-200 text-yellow-800' });
-  if (fat > 20 && carbs < 30) tags.push({ label: 'Too Oily', color: 'bg-orange-200 text-orange-800' });
-  if (fat < 15 && fiber > 5 && sugar < 10) tags.push({ label: 'Healthy Food', color: 'bg-green-200 text-green-800' });
-  if (sugar > 20) tags.push({ label: 'High Sugar', color: 'bg-pink-200 text-pink-800' });
-  if (protein > 20) tags.push({ label: 'High Protein', color: 'bg-blue-200 text-blue-800' });
+  if (typeof fat === 'number' && fat > 25) tags.push({ label: 'Too Fatty', color: 'bg-yellow-200 text-yellow-800' });
+  if (typeof fat === 'number' && typeof carbs === 'number' && fat > 20 && carbs < 30)
+    tags.push({ label: 'Too Oily', color: 'bg-orange-200 text-orange-800' });
+  if (
+    typeof fat === 'number' && typeof fiber === 'number' && typeof sugar === 'number' &&
+    fat < 15 && fiber > 5 && sugar < 10
+  )
+    tags.push({ label: 'Healthy Food', color: 'bg-green-200 text-green-800' });
+  if (typeof sugar === 'number' && sugar > 20)
+    tags.push({ label: 'High Sugar', color: 'bg-pink-200 text-pink-800' });
+  if (typeof protein === 'number' && protein > 20)
+    tags.push({ label: 'High Protein', color: 'bg-blue-200 text-blue-800' });
   return tags;
 };
 
