@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, TrendingUp, Apple, Droplets, Heart, Shield, Eye, Bone, Plus, Wifi, WifiOff } from 'lucide-react';
+import { TrendingUp, Apple, Droplets, Heart, Shield, Eye, Bone, Plus, Wifi, WifiOff } from 'lucide-react';
 import NutritionCard from './NutritionCard';
 import TimePeriodSelector from './TimePeriodSelector';
 import DateSelector from './DateSelector';
@@ -46,6 +46,12 @@ const Dashboard = () => {
   };
 
   const handleAddMealClick = () => {
+    // If logged in (JWT present), bypass legacy password gate
+    const hasToken = !!localStorage.getItem('token');
+    if (hasToken) {
+      setShowMealUpload(true);
+      return;
+    }
     if (localStorage.getItem(PASSWORD_KEY) === 'true') {
       setShowMealUpload(true);
     } else {
@@ -82,9 +88,9 @@ const Dashboard = () => {
               <h1 className="text-xl font-medium text-gray-900">NutriTrack</h1>
               <div className="flex items-center space-x-1">
                 {isOnline ? (
-                  <Wifi className="h-4 w-4 text-green-500" title="Connected to backend" />
+                  <Wifi className="h-4 w-4 text-green-500" aria-label="Connected to backend" />
                 ) : (
-                  <WifiOff className="h-4 w-4 text-gray-400" title="Using demo data" />
+                  <WifiOff className="h-4 w-4 text-gray-400" aria-label="Using demo data" />
                 )}
               </div>
             </div>
@@ -285,7 +291,7 @@ const Dashboard = () => {
           </button>
         </div>
       )}
-      {/* Password Prompt Modal */}
+  {/* Password Prompt Modal (legacy fallback) */}
       {showPasswordPrompt && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <form
